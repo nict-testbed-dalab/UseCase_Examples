@@ -1,0 +1,107 @@
+#ipcamera_param {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  border-style: groove;
+  width: 200px;
+  height: 420px;
+  padding: 10px 10px 10px 10px;
+  text-align: right;
+  opaity: 0.5 ;
+}
+#open_ipcamera {
+  position: absolute;
+  top: 0px;
+  right: 10px;
+}
+#ipcamera_div {
+  position: absolute;
+  top: 35px;
+  width: 200px;
+}
+
+#camera_param {
+  position: absolute;
+  /* top: 480px;
+  right: 30px; */
+  right: 0px;
+  border-style: groove;
+  width: 200px;
+  height: 500px;
+  padding: 10px 10px 10px 10px;
+  text-align: right;
+  opaity: 0.5 ;
+}
+#open_camera {
+  position: absolute;
+  top: 0px;
+  right: 10px;
+}
+#camera_div {
+  position: absolute;
+  top: 35px;
+  width: 200px;
+}
+
+
+#ipcamera_param
+ul {
+  padding: 0;
+  margin: 0;
+}
+#camera_param
+ul {
+  padding: 0;
+  margin: 0;
+}
+#ipcamera_param
+li {
+  list-style:none;
+  margin:0px;
+  padding:5px;
+  border-bottom: 2px;
+  font-size: 12px;
+}
+#camera_param
+li {
+  list-style:none;
+  margin:0px;
+  padding:5px;
+  border-bottom: 2px;
+  font-size: 12px;
+}
+#ipcamera_tilt_slider, #ipcamera_pan_slider, #ipcamera_roll_slider {
+  left: 50px;
+  width: 140px;
+}
+#radius_slider, #camera_vfov_slider, #camera_tilt_slider, #camera_pan_slider, #camera_xtrack_slider, #camera_ytrack_slider {
+  left: 50px;
+  width: 140px;
+}
+#opacity_slider {
+  left: 50px;
+  width: 140px;
+}
+
+#ipcamera_param
+input[type="button"] {
+  width: 150px;
+}
+#camera_param
+input[type="button"] {
+  width: 150px;
+}
+#ipcamera_param
+input[type="text"] {
+  width: 50px;
+}
+#camera_param
+input[type="text"] {
+  width: 50px;
+}
+#ipcamera_param
+input[type="checkbox"] {
+}
+#camera_param
+input[type="checkbox"] {
+}

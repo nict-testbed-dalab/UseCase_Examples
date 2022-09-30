@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Mapbox</title>
+
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.2/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.2/mapbox-gl.css' rel='stylesheet'/>
+  <script src="https://unpkg.com/deck.gl@^8.1.0/dist.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript" src="js/layer_conf.js"></script>
+  <script type="text/javascript" src="js/controller.js"></script>
+
+  <link   type="text/css"        href="css/index.css?date=20211201_25" rel="stylesheet">
+  <link   type="text/css"        href="css/menu.css?date=20211201_25" rel="stylesheet">
+  <link   type="text/css"        href="css/side-menu.css?date=20211201_25" rel="stylesheet">
+  <link   type="text/css"        href="css/legend.css?date=20211201_25" rel="stylesheet">
+
+</head>
+
+<body>
+  <div id="base_menu">
+    <input id="base_gsi_std_vector" type="radio" name="rtoggle" value="1" >
+    <label for="base_gsi_std_vector">地理院地図Vector</label>
+
+    <input id="base_gsi_pale" type="radio" name="rtoggle" value="2" checked="checked">
+    <label for="base_gsi_pale">地理院タイル（淡色地図）</label>
+
+    <input id="base_gsi_std" type="radio" name="rtoggle" value="3">
+    <label for="base_gsi_std">地理院タイル（標準地図）</label>
+
+    <input id="base_gsi_photo" type="radio" name="rtoggle" value="4">
+    <label for="base_gsi_photo">地理院タイル（航空写真）</label>
+
+    <input id="base_osm_vector" type="radio" name="rtoggle" value="5">
+    <label for="base_osm_vector">OSM(ベクター)</label>
+
+    <input id="base_osm_raster" type="radio" name="rtoggle" value="6">
+    <label for="base_osm_raster">OSM(ラスター)</label>
+ </div>
+
+  <div id="side-menu">
+    <dl class="ac">
+      <dt class="ac-parent">地理空間情報 施設</dt>
+      <dd class="ac-child" id="ac_group1_5"></dd>
+      <dt class="ac-parent">地理空間情報 交通</dt>
+      <dd class="ac-child" id="ac_group1_6"></dd>
+      <dt class="ac-parent">3次元建物</dt>
+      <dd class="ac-child" id="ac_group3"></dd>
+      <dt class="ac-parent">行政境界</dt>
+      <dd class="ac-child" id="ac_group4"></dd>
+    </dl>
+  </div>
+
+  <div id="map"></div>
+  <div id="legend"></div>
+  <div id="pop_legend" class="pop_legend"></div>
+  <div id="jinryu_legend" class="jinryu_legend"></div>
+
+  <script type="text/javascript" src="https://unpkg.com/@turf/turf@6.3.0/turf.min.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/deck.gl@^8.0.0/dist.min.js"></script>
+  <script type="text/javascript" src="content/history_boundary.js?date=20220107_7"></script>
+  <script type="text/javascript" src="js/DisplayCapture.js?date=20220221_9"></script>
+  <script type="text/javascript" src="js/fnc.js?date=20220221_6"></script>
+  <script type="text/javascript" src="js/geojson_layer.js?date=20220107_6"></script>
+  <script type="text/javascript" src="js/index.js?date=20220224_1"></script>
+</body>
+</html>

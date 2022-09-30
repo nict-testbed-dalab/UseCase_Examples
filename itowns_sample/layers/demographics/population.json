@@ -1,0 +1,6 @@
+{
+      "Latitude" :"lat",
+      "Longitude" : "lon",
+      "Physical1": "population",
+      "Physical2" : "population"
+}

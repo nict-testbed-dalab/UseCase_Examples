@@ -1,0 +1,892 @@
+<html lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>災害状況可視化アプリ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./test_itw/css/example.css">
+    <link rel="stylesheet" type="text/css" href="./test_itw/css/LoadingScreen.css">
+    <link rel="stylesheet" type="text/css" href="./test_itw/css/play_box.css">
+    <link rel="stylesheet" type="text/css" href="./test_itw/css/style.css">
+    <link type="text/css" href="./test_itw/jquery-k2go-timeline/jquery-k2go-timeline.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./test_itw/css/default.css">
+    <link rel="stylesheet" type="text/css" href="./test_itw/css/default.date.css">
+    <link rel="stylesheet" type="text/css" href="./test_itw/css/legend.css">
+    <!-- parameter -->
+    <link rel="stylesheet" type="text/css" href="./test_itw/css/ipcamera_param.css">
+    <link rel="stylesheet" type="text/css" href="./test_itw/css/createSphereMap.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="./js/libs/FileSaver.js"></script>
+    <script type="text/javascript"></script>
+    <script type="text/javascript" src="./test_itw/jquery-k2go-timeline/jquery-k2go-timeline.js"></script>
+    <script type="text/javascript" src="./test_itw/jquery-k2go-timeline/lib/picker.js"></script>
+    <script type="text/javascript" src="./test_itw/jquery-k2go-timeline/lib/picker.date.js"></script>
+    <script type="text/javascript" src="./test_itw/jquery-k2go-timeline/lib/picker.date.lang.js"></script>
+    <script type="text/javascript" src="./test_itw/jquery-k2go-timeline/env.js"></script>
+    <script type="text/javascript" src="./test_itw/jquery-k2go-timeline/fnc.js"></script>
+    <script type="text/javascript" src="./test_itw/jquery-k2go-timeline/main.js"></script>
+    <script type="text/javascript" src="js/jquery-nict-stars-view-url.js"></script>
+    <!-- Font Awesome -->
+    <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+    <!-- JQuery UI -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./test_itw/dat.gui.min.js"></script>
+    <style type="text/css">
+      .dg ul {
+        list-style:none;
+        margin:0;
+        padding:0;
+        width:100%;
+        clear:both
+      }
+      .dg.ac { 
+        position:fixed;
+        top:0;
+        left:0;
+        right:0;
+        height:0;
+        z-index:0
+      }
+      .dg:not(.ac) .main { 
+        overflow:hidden
+      }
+      .dg.main {
+        -webkit-transition:opacity .1s linear;
+        -o-transition:opacity .1s linear;
+        -moz-transition:opacity .1s linear;
+        transition:opacity .1s linear
+      }
+      .dg.main.taller-than-window{ 
+        overflow-y:auto
+      }
+      .dg.main.taller-than-window .close-button{ 
+        opacity:1;
+        margin-top:-1px;
+        border-top:1px solid #2c2c2c
+      }
+      .dg.main ul.closed .close-button {
+        opacity:1 !important
+      }
+      .dg.main:hover .close-button,.dg.main .close-button.drag {
+        opacity:1
+      }
+      .dg.main .close-button{
+        -webkit-transition:opacity .1s linear;
+        -o-transition:opacity .1s linear;
+        -moz-transition:opacity .1s linear;
+        transition:opacity .1s linear;
+        border:0;
+        line-height:19px;
+        height:20px;
+        cursor:pointer;
+        text-align:center;
+        background-color:#000
+      }
+      .dg.main .close-button.close-top {
+        position:relative
+      }
+      .dg.main .close-button.close-bottom {
+        position:absolute
+      }
+      .dg.main .close-button:hover {
+        background-color:#111
+      }
+      .dg.a {
+        float:right;
+        margin-right:15px;
+        overflow-y:visible
+      }
+      .dg.a.has-save>ul.close-top {
+        margin-top:0
+      }
+      .dg.a.has-save>ul.close-bottom {
+        margin-top:27px
+      }
+      .dg.a.has-save>ul.closed {
+        margin-top:0
+      }
+      .dg.a .save-row { 
+        top:0;z-index:1002
+      }
+      .dg.a .save-row.close-top { 
+        position:relative
+      }
+      .dg.a .save-row.close-bottom {
+        position:fixed
+      }
+      .dg li { 
+        -webkit-transition:height .1s ease-out;
+        -o-transition:height .1s ease-out;
+        -moz-transition:height .1s ease-out;
+        transition:height .1s ease-out;
+        -webkit-transition:overflow .1s linear;
+        -o-transition:overflow .1s linear;
+        -moz-transition:overflow .1s linear;
+        transition:overflow .1s linear
+      }
+      .dg li:not(.folder){
+        cursor:auto;
+        height:27px;
+        line-height:27px;
+        padding:0 4px 0 5px
+      }
+      .dg li.folder {
+        padding:0;
+        border-left:4px solid rgba(0,0,0,0)
+      }
+      .dg li.title {
+        cursor:pointer;
+        margin-left:-4px
+      }
+      .dg .closed li:not(.title),.dg .closed ul li,.dg .closed ul li>*{
+        height:0;
+        overflow:hidden;
+        border:0
+      }
+      .dg .cr {
+        clear:both;
+        padding-left:3px;
+        height:27px;
+        overflow:hidden
+      }
+      .dg .property-name{ 
+        cursor:default;
+        float:left;
+        clear:left;
+        width:60%;
+        overflow:hidden;
+        text-overflow:ellipsis
+      }
+      .dg .c {
+        float:left;
+        width:40%;
+        position:relative
+      }
+      .dg .c input[type=text] {
+        border:0;
+        margin-top:4px;
+        padding:3px;
+        width:100%;
+        float:right
+      }
+      .dg .has-slider input[type=text] {
+        width:30%;
+        margin-left:0
+      }
+      .dg .slider {
+        float:left;
+        width:66%;
+        margin-left:-5px;
+        margin-right:0;
+        height:19px;
+        margin-top:4px
+      }
+      .dg .slider-fg {
+        height:100%
+      }
+      .dg .c input[type=checkbox] { 
+        margin-top:7px
+      }
+      .dg .c select { 
+        margin-top:5px
+      }
+      .dg .cr.function,.dg .cr.function .property-name,.dg .cr.function *,.dg .cr.boolean,.dg .cr.boolean * {
+        cursor:pointer
+      }
+      .dg .cr.color {
+        overflow:visible
+      }
+      .dg .selector {
+        display:none;
+        position:absolute;
+        margin-left:-9px;
+        margin-top:23px;
+        z-index:10
+      }
+      .dg .c:hover .selector,.dg .selector.drag {
+        display:block
+      }
+      .dg li.save-row {
+        padding:0
+      }
+      .dg li.save-row .button {
+        display:inline-block;
+        padding:0px 6px
+      }
+      .dg.dialogue {
+        background-color:#222;
+        width:460px;
+        padding:15px;
+        font-size:13px;
+        line-height:15px
+      }
+      #dg-new-constructor {
+        padding:10px;
+        color:#222;
+        font-family:Monaco, monospace;
+        font-size:10px;
+        border:0;
+        resize:none;
+        box-shadow:inset 1px 1px 1px #888;
+        word-wrap:break-word;
+        margin:12px 0;
+        display:block;
+        width:440px;
+        overflow-y:scroll;
+        height:100px;
+        position:relative
+      }
+      #dg-local-explain { 
+        display:none;
+        font-size:11px;
+        line-height:17px;
+        border-radius:3px;
+        background-color:#333;
+        padding:8px;
+        margin-top:10px
+      }
+      #dg-local-explain code { 
+        font-size:10px
+      }
+      #dat-gui-save-locally { 
+        display:none
+      }
+      .dg { 
+        color:#eee;
+        font:11px 'Lucida Grande', sans-serif;
+        text-shadow:0 -1px 0 #111
+      }
+      .dg.main::-webkit-scrollbar { 
+        width:5px;
+        background:#1a1a1a
+      }
+      .dg.main::-webkit-scrollbar-corner {
+        height:0;
+        display:none
+      }
+      .dg.main::-webkit-scrollbar-thumb {
+        border-radius:5px;
+        background:#676767
+      }
+      .dg li:not(.folder) {
+        background:#1a1a1a;
+        border-bottom:1px solid #2c2c2c
+      }
+      .dg li.save-row {
+        line-height:25px;
+        background:#dad5cb;
+        border:0
+      }
+      .dg li.save-row select {
+        margin-left:5px;width:108px
+      }
+      .dg li.save-row .button {
+        margin-left:5px;
+        margin-top:1px;
+        border-radius:2px;
+        font-size:9px;
+        line-height:7px;
+        padding:4px 4px 5px 4px;
+        background:#c5bdad;
+        color:#fff;
+        text-shadow:0 1px 0 #b0a58f;
+        box-shadow:0 -1px 0 #b0a58f;
+        cursor:pointer
+      }
+      .dg li.save-row .button.gears {
+        background:#c5bdad url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAANCAYAAAB/9ZQ7AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAQJJREFUeNpiYKAU/P//PwGIC/ApCABiBSAW+I8AClAcgKxQ4T9hoMAEUrxx2QSGN6+egDX+/vWT4e7N82AMYoPAx/evwWoYoSYbACX2s7KxCxzcsezDh3evFoDEBYTEEqycggWAzA9AuUSQQgeYPa9fPv6/YWm/Acx5IPb7ty/fw+QZblw67vDs8R0YHyQhgObx+yAJkBqmG5dPPDh1aPOGR/eugW0G4vlIoTIfyFcA+QekhhHJhPdQxbiAIguMBTQZrPD7108M6roWYDFQiIAAv6Aow/1bFwXgis+f2LUAynwoIaNcz8XNx3Dl7MEJUDGQpx9gtQ8YCueB+D26OECAAQDadt7e46D42QAAAABJRU5ErkJggg==) 2px 1px no-repeat;
+        height:7px;
+        width:8px
+      }
+      .dg li.save-row .button:hover {
+        background-color:#bab19e;
+        box-shadow:0 -1px 0 #b0a58f
+      }
+      .dg li.folder {
+        border-bottom:0
+      }
+      .dg li.title {
+        padding-left:16px;
+        background:#000 url(data:image/gif;base64,R0lGODlhBQAFAJEAAP////Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==) 6px 10px no-repeat;
+        cursor:pointer;
+        border-bottom:1px solid rgba(255,255,255,0.2)
+      }
+      .dg .closed li.title {
+        background-image:url(data:image/gif;base64,R0lGODlhBQAFAJEAAP////Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlGIWqMCbWAEAOw==)
+      }
+      .dg .cr.boolean {
+        border-left:3px solid #806787
+      }
+      .dg .cr.color {
+        border-left:3px solid
+      }
+      .dg .cr.function {
+        border-left:3px solid #e61d5f
+      }
+      .dg .cr.number {
+        border-left:3px solid #2FA1D6
+      }
+      .dg .cr.number input[type=text] {
+        color:#2FA1D6
+      }
+      .dg .cr.string {
+        border-left:3px solid #1ed36f
+      }
+      .dg .cr.string input[type=text] {
+        color:#1ed36f
+      }
+      .dg .cr.function:hover,.dg .cr.boolean:hover {
+        background:#111
+      }
+      .dg .c input[type=text] {
+        background:#303030;
+        outline:none
+      }
+      .dg .c input[type=text]:hover {
+        background:#3c3c3c
+      }
+      .dg .c input[type=text]:focus {
+        background:#494949;
+        color:#fff
+      }
+      .dg .c .slider {
+        background:#303030;cursor:ew-resize
+      }
+      .dg .c .slider-fg {
+        background:#2FA1D6;
+        max-width:100%
+      }
+      .dg .c .slider:hover {
+        background:#3c3c3c
+      }
+      .dg .c .slider:hover .slider-fg {
+        background:#44abda
+      }
+    </style>
+    <style type="text/css">
+      #current_time2 {
+        position: absolute;
+        top: 10px;
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        width: 730px;
+        text-align: center;
+        float:left;
+      }
+    </style>
+    <style type="text/css">
+      .hidden { display: none; }
+      .nav-container{
+          position: fixed;
+          top: 0;    
+      }
+      .navbar {height: 40px;}
+
+.collapse {
+  &:not(.show) {
+    display: none;
+  }
+}
+
+.navbar {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap; // allow us to do the line break for collapsing content
+  align-items: center;
+  justify-content: space-between; // space out brand from logo
+  padding: $navbar-padding-y $navbar-padding-x;
+
+  > .container,
+  > .container-fluid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+
+.navbar-nav {
+  display: flex;
+  flex-direction: column;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+
+  .nav-link {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .dropdown-menu {
+    position: static;
+    float: none;
+  }
+}
+
+
+.navbar-text {
+  display: inline-block;
+  padding-top: $nav-link-padding-y;
+  padding-bottom: $nav-link-padding-y;
+}
+
+.navbar-collapse {
+  flex-basis: 100%;
+  flex-grow: 1;
+  align-items: center;
+}
+
+.navbar-toggler {
+  padding: $navbar-toggler-padding-y $navbar-toggler-padding-x;
+  @include font-size($navbar-toggler-font-size);
+  line-height: 1;
+  background-color: transparent; // remove default button style
+  border: $border-width solid transparent; // remove default button style
+  @include border-radius($navbar-toggler-border-radius);
+
+  @include hover-focus {
+    text-decoration: none;
+  }
+}
+
+.navbar-toggler-icon {
+  display: inline-block;
+  width: 1.5em;
+  height: 1.5em;
+  vertical-align: middle;
+  content: "";
+  background: no-repeat center center;
+  background-size: 100% 100%;
+}
+
+.navbar-expand {
+  @each $breakpoint in map-keys($grid-breakpoints) {
+    $next: breakpoint-next($breakpoint, $grid-breakpoints);
+    $infix: breakpoint-infix($next, $grid-breakpoints);
+
+    &#{$infix} {
+      @include media-breakpoint-down($breakpoint) {
+        > .container,
+        > .container-fluid {
+          padding-right: 0;
+          padding-left: 0;
+        }
+      }
+
+      @include media-breakpoint-up($next) {
+        flex-flow: row nowrap;
+        justify-content: flex-start;
+
+        .navbar-nav {
+          flex-direction: row;
+
+          .dropdown-menu {
+            position: absolute;
+          }
+
+          .nav-link {
+            padding-right: $navbar-nav-link-padding-x;
+            padding-left: $navbar-nav-link-padding-x;
+          }
+        }
+
+        // For nesting containers, have to redeclare for alignment purposes
+        > .container,
+        > .container-fluid {
+          flex-wrap: nowrap;
+        }
+
+        .navbar-collapse {
+          display: flex !important;
+
+          // Changes flex-bases to auto because of an IE10 bug
+          flex-basis: auto;
+        }
+
+        .navbar-toggler {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+.navbar-light {
+
+  .navbar-nav {
+    .nav-link {
+      color: $navbar-light-color;
+
+      @include hover-focus {
+        color: $navbar-light-hover-color;
+      }
+
+      &.disabled {
+        color: $navbar-light-disabled-color;
+      }
+    }
+
+    .show > .nav-link,
+    .active > .nav-link,
+    .nav-link.show,
+    .nav-link.active {
+      color: $navbar-light-active-color;
+    }
+  }
+
+  .navbar-toggler {
+    color: $navbar-light-color;
+    border-color: $navbar-light-toggler-border-color;
+  }
+
+  .navbar-toggler-icon {
+    background-image: $navbar-light-toggler-icon-bg;
+  }
+
+  .navbar-text {
+    color: $navbar-light-color;
+    a {
+      color: $navbar-light-active-color;
+
+      @include hover-focus {
+        color: $navbar-light-active-color;
+      }
+    }
+  }
+}
+
+    </style>
+  </head>
+
+  <body>
+		<!--GlobeViewのcontainer-->
+
+		<div id="viewerDiv">
+			<canvas tabindex="-1" width="1278" height="582" style="width: 1278px; height: 582px;"></canvas>
+	        <div class="dg main" id="menuDiv" >
+				<ul>
+					<li class="folder">
+				        <div class="dg">
+							<ul class="closed">
+								<li class="folder">
+							        <div class="dg">
+										<ul class="closed">
+											<li class="title">GSI-PHOTO</li>
+											<li class="cr boolean">
+												<div>
+													<span class="property-name">visible</span>
+													<div class="c"><input type="checkbox" checked="checked"></div>
+												</div>
+											</li>
+											<li class="cr number has-slider">
+												<div>
+													<span class="property-name">opacity</span>
+													<div class="c">
+														<div><input type="text"></div>
+														<div class="slider">
+															<div class="slider-fg" style="width: 100%;"></div>
+														</div>
+													</div>
+												</div>
+											</li>
+											<li class="cr boolean">
+												<div><span class="property-name">frozen</span>
+													<div class="c"><input type="checkbox"></div>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+        <span id="divScaleWidget"> Scale </span>
+        <!--地球儀の表面のテクスチャのビューのcontainer？-->
+		<div id="miniDiv"><canvas tabindex="-1" width="100" height="100" style="width: 100px; height: 100px;"></canvas></div>
+
+
+		<div id="time_controller">
+			<div class="date_prev"></div>
+			<div class="time_prev"></div>
+			<div class="time_rail">
+				<div class="time_range"></div>
+			</div>
+			<div class="time_next"></div>
+			<div class="date_next"></div>
+		</div>
+
+    <div class="move_button">
+      <div id="movelink" style="display: grid; text-align: right; z-index: 3; width: min-content; border-style: groove; padding: 0 0 10px 10px; background-color: rgba(200,200,200,0.2); margin-bottom: 20px;">
+        <!-- 開閉ボタンの追加 -->
+        <p id="open_movelink">ボタン <i class="fa fa-minus fa-lg"></i></p>
+
+
+
+        <nav class="navbar navbar-expand-md navbar-light bg-light">
+          <div class="container">
+            <!--button
+              class="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target="#navbarNav"
+              aria-controls="navbarNav"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <!--span class="navbar-toggler-icon"></span>
+            </button-->
+
+            <div class="navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav d-none d-md-block">
+                <!-- Login button: show if NOT authenticated -->
+                <li class="nav-item auth-invisible">
+                  <button
+                    id="qsLoginBtn"
+                    onclick="login()"
+                    class="btn btn-primary btn-margin auth-invisible "
+                  >
+                    ログイン
+                  </button>
+                </li>
+                <!-- / Login button -->
+
+                <!-- Fullsize dropdown: show if authenticated -->
+                <li class="nav-item dropdown auth-visible hidden">
+                  <a
+                      href="#"
+                      class="dropdown-item"
+                      id="qsLogoutBtn"
+                      onclick="logout()"
+                  >
+                    <!-- Profile image should be set to the profile picture from the id token -->
+                    <img
+                      alt="Profile picture"
+                      class="nav-user-profile profile-image rounded-circle"
+                      width="35"
+                      style ="margin-top: 0px;"
+                    />
+                  </a>
+	              <input type="hidden" id="atk" value="" >
+                  <!--div class="dropdown-menu">
+                    <!-- Show the user's full name from the id token here -->
+                    <!-- div class="dropdown-header nav-user-name user-name"></div-->
+                    <!-- <a
+                      href="/profile"
+                      class="dropdown-item dropdown-profile route-link"
+                    >
+                      <i class="fas fa-user mr-3"></i> Profile
+                    </a> -->
+                    <!--a
+                      href="#"
+                      class="dropdown-item"
+                      id="qsLogoutBtn"
+                      onclick="logout()"
+                    >
+                      <i class="fas fa-power-off mr-3"></i> ログアウト
+                    </a>
+                  </div-->
+                </li>
+                <!-- /Fullsize dropdown -->
+              </ul>
+            </div>
+          </div>
+        </nav>
+
+
+
+
+
+
+        <div id="movelink_div">
+          <!--div class="movelink_top">
+            <p style="color:white; margin-top: 5px; height: 60px;">場所：</p>
+            <div class="movelink_top_list"-->
+              <input type="hidden" id="button2" value="" >
+              <input type="hidden" id="button3" value="" >
+              <input type="hidden" id="button4" value="" >
+              <input type="hidden" id="button5" value="" >
+            <!--/div>
+          </div-->
+            <input type="hidden" id="button_photo" value="スクリーンショット" >
+            <input type="hidden" id="button_movie" value="録画" >
+            <input type="hidden" id="button_single_capture" value="画面キャプチャ" ><br>
+            <input type="hidden" id="button_multi_capture" value="連続画面キャプチャ" >
+            <input type="hidden" id="button_360_capture" value="360度画像" >
+          <div class="movelink_bottom" id="movelink_bottom">
+            <p style="color:white">その他：</p>
+            <div class="movelink_bottom_list">
+              <input type="button" id="button"  value="東京">
+              <input type="button" id="button0" value="ひまわり雲データ" >
+              <input type="hidden" id="button_GLTF" value="" >
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- itowns camera parameter -->
+      <div id="camera_param" style="width: 200px; height: 270px; text-align: right; z-index:3; background-color:rgba(200,200,200,0.2); color: white;">
+        <p id="open_camera">カメラの設定 <i class="fa fa-minus fa-lg"></i></p>
+        <div id="camera_div" style="width: 180px;">
+          <ul>
+            <li><input type="button" value="Reset camera" class="param_set_camera" style="display:none;"/></li>
+            <li><label id="param_label">camera zoom : </label><input type="text" value="30" class="param_camera_vfov"/></li>
+            <li><div id="camera_vfov_slider"/></li>
+            <li><label id="param_label">camera tilt : </label><input type="text" value="-25" class="param_camera_tilt"/></li>
+            <li><div id="camera_tilt_slider"/></li>
+            <li><input type="checkbox" name="camera_tilt_mouse_dir" value="1" class="param_camera_tilt_mouse_dir" checked>mouse direction</input></li>
+            <li><label id="param_label">camera pan : </label><input type="text" value="0" class="param_camera_pan"/></li>
+            <li><div id="camera_pan_slider"/></li>
+            <li><button class="btn_view_url">ViewURL</button></li>
+            <!--li><input type="checkbox" name="camera_pan_mouse_dir" value="1" class="param_camera_pan_mouse_dir" checked>mouse direction</input></li>
+            <li><input type="checkbox" name="plane_onoff" value="1" class="param_plane_onoff" checked>plane onoff</input></li>
+            <li><label id="param_label">opacity: </label><input type="text" value="0.5" class="param_opacity"/></li>
+            <li><div id="opacity_slider"/></li-->
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- itowns camera parameter -->
+
+    <div id="current_time2" style="z-index: 3;">
+      <div id="info"></div>
+      <input type="date" style="display:none;"/>
+      <input type="time" step="1" style="display:none;"/>
+      <span id="date_box">
+        <span id="cal" class="picker__input" aria-haspopup="true" aria-expanded="false" aria-readonly="false" aria-owns="cal_root"></span>
+        <span id="date">0000-00-00 00:00:00</span>
+        <span id="current_time" class="timeCurrent"></span>
+      </span>
+      <span id="play_box">
+        <a id="button_loop"></a>
+        <span id="play_ctl">
+          <a id="button_back_edge"></a>
+          <a id="button_back"></a>
+          <a id="button_play_reverse"><span></span></a>
+          <a id="button_stop"></a>
+          <a id="button_play"><span></span></a>
+          <a id="button_fwd"></a>
+          <a id="button_fwd_edge"></a>
+          <a id="button_conf"></a>
+        </span>
+        <span id="blank"></span>
+      </span>
+    </div>
+    <div id="panel-conf" class="ui-draggable ui-draggable-handle active">
+    
+      <div id="panel-conf-header">
+        <span>再生設定</span>
+        <span id="panel-conf-close"></span>
+      </div>
+  
+      <div id="panel-conf-body">
+  
+        <div id="play-mode-col">
+          <div class="form-title" id="form-title-mode">
+            再生モード
+          </div>
+          <div id="play-mode-selector">
+            <div id="play-mode-normal">
+              通常再生
+            </div>
+            <div id="play-mode-span" class="active">
+              コマ送り再生
+            </div>
+          </div>
+        </div>
+  
+        <div id="play-range-col">
+          <div id="form-title-play-speed">
+  
+            <div id="form-title-play-speed-title">再生間隔</div>
+  
+            <div class="input-area" id="play-speed-wrapper">
+              <input type="range" id="play-speed" min="1" max="10" value="1" step="1">
+            </div>
+            <div class="value-display" id="display1">1sec</div>
+
+            <div class="input-area" id="play-speed-wrapper2" style="display: none" disabled="">
+              <input type="range" id="play-speed2" min="1" max="11" value="4" step="1">
+            </div>
+            <div class="value-display" id="display2" style="display: none;">x1 (1min/sec)</div>
+
+          </div>
+        </div>
+  
+        <div id="form-title-play-span">
+          <div id="form-title-play-span-title">
+            コマ送り間隔
+          </div>
+          <div class="input-area">
+            <input type="range" id="play-span" min="1" max="10" value="1" step="1">
+          </div>
+          <div class="value-display" id="display3"><span id="frame">1f</span> / <span id="time">1min</span></div>
+        </div>
+  
+      </div>
+  
+      </div>
+
+    <div id="footer">
+      <div id="button_range"><span>RangeBar</span></div>
+      <div id="timeline" style="z-index: 3;"></div>
+      <div id="slider_label">1 day</div>
+      <div id="slider">
+        <a id="button_minus"></a>
+        <input id="zoom-range" type="range" class="input-range" min="0" step="1" />
+        <a id="button_plus"></a>
+      </div>
+    </div>
+
+    <!--左上のcontorols-->
+    <script src="./test_itw/GuiTools.js"></script>
+    <script src="./test_itw/itowns.js"></script>
+    <script src="./test_itw/LoadingScreen.js"></script>
+    <script src="./test_itw/debug.js"></script>
+    <script src="./js/papaparse.min.js"></script>
+    <script src="./js/encoding.min.js"></script>
+    <script src="./js/colormap.js"></script>
+    <script src="./js/expr-eval.js"></script>
+    <script src="./js/3dBargraph.js"></script>
+    <script src="./js/DisplayCapture.js"></script>
+    <script src="./js/projectNict/createSphereMap.js"></script>
+    <!--本体スクリプト-->
+    <!--type="module"の設定でjsファイル内でimport文が利用可能になる-->
+    <script type="module" src="./test_itw/app.js"></script>
+    <script src="./js/plugins/DragNDrop.js"></script>
+    <script src="./js/OrientedImageHelper.js"></script>
+    <script src='./js/ThreeLoader.js'></script>
+
+    <div id="lockWindow" class=""></div>
+      <div id="view_url" style="display:none;">
+        <div id="view_url_box">
+          <div class="view_url_box_header">
+            <div class="view_url_box_title">ViewURL</div>
+            <div class="view_url_box_close"></div>
+          </div>
+          <div class="view_url_box_body">
+            <div class="input_group">
+              <input type="text" value="" aria-label="" readonly="" id="view_url_input">
+              <div class="input_group_button"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="legend" class="drag-and-drop"></div>
+      <div id="pop_legend" class="drag-and-drop" style="display:none;"></div>
+      <div id="jinryu_legend" class="drag-and-drop" style="display:none;"></div>
+    <div id="lockWindow" class=""></div>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.auth0.com/js/auth0-spa-js/1.13/auth0-spa-js.production.js"></script>
+    <script src="js/ui.js?date=20211220_1"></script> 
+    <script src="js/app.js?date=20220107_5"></script>
+  </body>
+</html>
